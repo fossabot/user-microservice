@@ -3,13 +3,12 @@ package main
 import (
 	"os"
 
-	"github.com/gin-gonic/gin"
-
-	log "github.com/sirupsen/logrus"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+	"github.com/thomaspoignant/user-microservice/config"
 )
 
 var initialized = false
@@ -28,6 +27,9 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 }
 
 func main() {
+	//load config file
+	config.LoadConfigFile()
+
 	switch runAs := os.Getenv("RUN_AS"); runAs {
 	case "lambda":
 		log.Info("Run as lambda")
