@@ -3,21 +3,21 @@ package config
 import (
 	"os"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
 var Conf Configuration
 
+// Configuration is the struct who store configuration
 type Configuration struct {
 	Database DatabaseConfiguration
 }
 
+// LoadConfigFile load configuration from YAML file
 func LoadConfigFile() {
-
 	env := os.Getenv("env")
-	log.WithFields(logrus.Fields{"env": env}).Info("Loading config files for :")
+	log.Infof("Loading config files for : %s", env)
 
 	var configFileName string
 	if env == "" {
@@ -25,9 +25,7 @@ func LoadConfigFile() {
 	} else {
 		configFileName = "config." + env
 	}
-
-	log.Info("Trying to load file : " + configFileName)
-
+	log.Debugf("Trying to load file : %s", configFileName)
 	viper.SetConfigName(configFileName)
 	viper.AddConfigPath("config/")
 
