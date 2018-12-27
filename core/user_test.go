@@ -100,5 +100,4 @@ func TestInsertAndReadUser(t *testing.T) {
 	assert.Equal(t, user.FirstName, result.FirstName)
 	assert.Equal(t, user.LastName, result.LastName)
 	assert.Equal(t, user.ID, result.ID)
-
 }
