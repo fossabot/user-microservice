@@ -1,3 +1,4 @@
 vendor/
 user-microservice
 coverage/
+*.orig
