@@ -12,7 +12,7 @@ BINARY_NAME=user-microservice
 all: deps lint tool test coverage build
 
 test: 
-	export GIN_MODE=release && $(GOTEST) -short $(go list ./... | grep -v /vendor/)
+	export GIN_MODE=release && $(GOTEST) -v -short ./...
 
 build:
 	$(GOBUILD) -v .

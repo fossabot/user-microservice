@@ -1,5 +1,7 @@
 package config
 
 type DatabaseConfiguration struct {
-	ConnectionUri string
+	TableName struct {
+		User string
+	}
 }
