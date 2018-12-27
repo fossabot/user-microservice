@@ -26,9 +26,8 @@ func getUserService(uniqDbName string, t *testing.T) UserService {
 	if !userServiceTestInit {
 		var err error
 		currentService, err := newUserService(uniqDbName)
-		if err != nil {
-			assert.Nil(t, err)
-		}
+		assert.Nil(t, err)
+
 		userServiceTest = *currentService
 		userServiceTestInit = true
 	}
@@ -39,6 +38,12 @@ func setupTable(uniqDbName string) {
 	db.DynamoDbClient.Table(uniqDbName).DeleteTable()
 	//creation of the dynamo table
 	db.DynamoDbClient.CreateTable(uniqDbName, User{}).Run()
+}
+
+// newUserService with an empty table name
+func TestEmptyTableName(t *testing.T) {
+	_, err := newUserService("")
+	assert.NotNil(t, err)
 }
 
 // insert a user and test that object is updated
