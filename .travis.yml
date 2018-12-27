@@ -4,7 +4,7 @@ go:
 services:
   - docker
 before_install:
-  - docker run -p 9000:8000 amazon/dynamodb-local
+  - docker run -d -p 9000:8000 amazon/dynamodb-local
   - go get github.com/mattn/goveralls
   - make deps
 script:
