@@ -5,6 +5,7 @@ import (
 
 	"github.com/guregu/dynamo"
 	uuid "github.com/satori/go.uuid"
+	log "github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/user-microservice/db"
 )
 
@@ -41,9 +42,14 @@ func (service *UserService) createUser(user *User) error {
 func (service *UserService) updateUser(user *User) error {
 	now := time.Now()
 	user.UpdatedAt = now
-	return service.UserTable.Update(user.ID, user).Run()
+	return service.UserTable.Update("id", user.ID).Run()
 }
 
 func (service *UserService) getUser(user *User) error {
+	log.WithField("user", user).Info("Param for update")
 	return service.UserTable.Get("id", user.ID).One(user)
+}
+
+func (service *UserService) deleteUser(user *User) error {
+	return service.UserTable.Delete("id", user.ID).Run()
 }

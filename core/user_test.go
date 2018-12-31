@@ -66,7 +66,6 @@ func TestInsertUser(t *testing.T) {
 	value, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
 	assert.Nil(t, err)
 	assert.Equal(t, int64(1), value)
-
 }
 
 //insert a user and try to read what is in database
@@ -104,5 +103,75 @@ func TestInsertAndReadUser(t *testing.T) {
 
 	assert.Equal(t, user.FirstName, result.FirstName)
 	assert.Equal(t, user.LastName, result.LastName)
+	assert.Equal(t, user.ID, result.ID)
+}
+
+func TestInsertAndDeleteUser(t *testing.T) {
+	uniqDbName := createTableBeforeTest()
+	setupTable(uniqDbName)
+	service := getUserService(uniqDbName, t)
+
+	user := User{
+		FirstName: "John",
+		LastName:  "Doe",
+	}
+	err := service.createUser(&user)
+	assert.Nil(t, err)
+
+	numberOfUser, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), numberOfUser)
+
+	err = service.deleteUser(&user)
+	assert.Nil(t, err)
+
+	numberOfUserAfterDelete, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
+	assert.Nil(t, err)
+	assert.Equal(t, int64(0), numberOfUserAfterDelete)
+}
+
+func TestUpdateUser(t *testing.T) {
+	uniqDbName := createTableBeforeTest()
+	setupTable(uniqDbName)
+	service := getUserService(uniqDbName, t)
+
+	user := User{
+		FirstName: "John",
+		LastName:  "Doe",
+	}
+
+	err := service.createUser(&user)
+	assert.Nil(t, err)
+
+	value, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), value)
+
+	result := user
+	err = service.getUser(&user)
+	assert.Nil(t, err)
+	expectedCreatedAt, _ := user.CreatedAt.MarshalJSON()
+	gotCreatedAt, _ := result.CreatedAt.MarshalJSON()
+	assert.Equal(t, expectedCreatedAt, gotCreatedAt)
+	expectedUpdatedAt, _ := user.UpdatedAt.MarshalJSON()
+	gotUpdatedAt, _ := result.UpdatedAt.MarshalJSON()
+	assert.Equal(t, expectedUpdatedAt, gotUpdatedAt)
+	assert.Equal(t, user.FirstName, result.FirstName)
+	assert.Equal(t, user.LastName, result.LastName)
+	assert.Equal(t, user.ID, result.ID)
+
+	updatedUser := user
+	updatedUser.FirstName = "John2"
+	updatedUser.LastName = "Doe2"
+
+	log.Infof("updatedUser : %s", updatedUser)
+	err = service.updateUser(&updatedUser)
+	assert.Nil(t, err)
+	gotUpdatedCreatedAt, _ := updatedUser.CreatedAt.MarshalJSON()
+	assert.Equal(t, expectedCreatedAt, gotUpdatedCreatedAt)
+	gotUpdatedUpdatedAt, _ := updatedUser.UpdatedAt.MarshalJSON()
+	assert.NotEqual(t, expectedUpdatedAt, gotUpdatedUpdatedAt)
+	assert.NotEqual(t, user.FirstName, updatedUser.FirstName)
+	assert.NotEqual(t, user.LastName, updatedUser.LastName)
 	assert.Equal(t, user.ID, result.ID)
 }

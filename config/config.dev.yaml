@@ -1,5 +1,6 @@
 database:
-  connectionUri: "database dev connection uri"
+  tableName:
+    user: "User"  
 
 awsConfig:
   region: "eu-west-1"

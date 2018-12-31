@@ -1,10 +1,13 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"github.com/thomaspoignant/user-microservice/config"
 )
 
@@ -26,7 +29,7 @@ func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse,
 func main() {
 	//load config file
 	config.LoadConfigFile()
-
+	fmt.Println(viper.GetString("awsConfig.region"))
 	/*switch runAs := os.Getenv("RUN_AS"); runAs {
 	case "lambda":
 		log.Info("Run as lambda")
