@@ -57,7 +57,7 @@ func TestInsertUser(t *testing.T) {
 		LastName:  "Doe",
 	}
 
-	err := service.createUser(&user)
+	err := service.saveUser(&user)
 	assert.Nil(t, err)
 	assert.NotNil(t, user.ID)
 	assert.NotNil(t, user.UpdatedAt)
@@ -79,7 +79,7 @@ func TestInsertAndReadUser(t *testing.T) {
 		LastName:  "Doe",
 	}
 
-	err := service.createUser(&user)
+	err := service.saveUser(&user)
 	assert.Nil(t, err)
 
 	value, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -115,7 +115,7 @@ func TestInsertAndDeleteUser(t *testing.T) {
 		FirstName: "John",
 		LastName:  "Doe",
 	}
-	err := service.createUser(&user)
+	err := service.saveUser(&user)
 	assert.Nil(t, err)
 
 	numberOfUser, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -140,7 +140,7 @@ func TestUpdateUser(t *testing.T) {
 		LastName:  "Doe",
 	}
 
-	err := service.createUser(&user)
+	err := service.saveUser(&user)
 	assert.Nil(t, err)
 
 	value, err := db.DynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -165,7 +165,7 @@ func TestUpdateUser(t *testing.T) {
 	updatedUser.LastName = "Doe2"
 
 	log.Infof("updatedUser : %s", updatedUser)
-	err = service.updateUser(&updatedUser)
+	err = service.saveUser(&updatedUser)
 	assert.Nil(t, err)
 	gotUpdatedCreatedAt, _ := updatedUser.CreatedAt.MarshalJSON()
 	assert.Equal(t, expectedCreatedAt, gotUpdatedCreatedAt)

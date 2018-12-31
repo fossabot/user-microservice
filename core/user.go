@@ -31,18 +31,14 @@ func newUserService(tableName string) (*UserService, error) {
 	}, nil
 }
 
-func (service *UserService) createUser(user *User) error {
+func (service *UserService) saveUser(user *User) error {
 	now := time.Now()
-	user.CreatedAt = now
+	if user.ID == "" {
+		user.CreatedAt = now
+		user.ID = uuid.NewV4().String()
+	}
 	user.UpdatedAt = now
-	user.ID = uuid.NewV4().String()
 	return service.UserTable.Put(user).Run()
-}
-
-func (service *UserService) updateUser(user *User) error {
-	now := time.Now()
-	user.UpdatedAt = now
-	return service.UserTable.Update("id", user.ID).Run()
 }
 
 func (service *UserService) getUser(user *User) error {
