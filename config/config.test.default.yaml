@@ -1,0 +1,7 @@
+database:
+  tableName:
+    user: "User_test"
+
+awsConfig:
+  region: "eu-west-1"
+  endpoint: "http://localhost:90000"
