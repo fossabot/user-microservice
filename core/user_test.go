@@ -17,8 +17,8 @@ func createTableBeforeTest() string {
 	if uniqDbName == "" {
 		uniqDbName = xid.New().String()
 		log.Infof("Database name for Test : %s", uniqDbName)
-		setupTable(uniqDbName)
 	}
+	setupTable(uniqDbName)
 	return uniqDbName
 }
 
@@ -49,7 +49,6 @@ func TestEmptyTableName(t *testing.T) {
 // insert a user and test that object is updated
 func TestInsertUser(t *testing.T) {
 	uniqDbName := createTableBeforeTest()
-	setupTable(uniqDbName)
 	service := getUserService(uniqDbName, t)
 
 	user := User{
@@ -71,7 +70,6 @@ func TestInsertUser(t *testing.T) {
 //insert a user and try to read what is in database
 func TestInsertAndReadUser(t *testing.T) {
 	uniqDbName := createTableBeforeTest()
-	setupTable(uniqDbName)
 	service := getUserService(uniqDbName, t)
 
 	user := User{
@@ -108,7 +106,6 @@ func TestInsertAndReadUser(t *testing.T) {
 
 func TestInsertAndDeleteUser(t *testing.T) {
 	uniqDbName := createTableBeforeTest()
-	setupTable(uniqDbName)
 	service := getUserService(uniqDbName, t)
 
 	user := User{
@@ -132,7 +129,6 @@ func TestInsertAndDeleteUser(t *testing.T) {
 
 func TestUpdateUser(t *testing.T) {
 	uniqDbName := createTableBeforeTest()
-	setupTable(uniqDbName)
 	service := getUserService(uniqDbName, t)
 
 	user := User{
