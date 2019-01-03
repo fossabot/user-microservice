@@ -174,4 +174,10 @@ func TestUpdateUser(t *testing.T) {
 	assert.NotEqual(t, user.FirstName, updatedUser.FirstName)
 	assert.NotEqual(t, user.LastName, updatedUser.LastName)
 	assert.Equal(t, user.ID, result.ID)
+
+	//we verify that we only have one entry
+	value, err = db.DynamoDbClient.Table(uniqDbName).Get("id", updatedUser.ID).Count()
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), value)
+
 }
