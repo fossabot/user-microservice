@@ -1,7 +1,7 @@
 package db
 
 import (
-	"fmt"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -17,7 +17,7 @@ var DynamoDbClient = dynamo.New(dynamoDbSession, &cfg)
 
 func GetDynamodbTable(tableName string) (*dynamo.Table, error) {
 	if tableName == "" {
-		return nil, fmt.Errorf("you must supply a table name")
+		return nil, log.Error("you must supply a table name")
 	}
 	table := DynamoDbClient.Table(tableName)
 	return &table, nil

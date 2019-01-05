@@ -1,12 +1,11 @@
 package main
 
 import (
-	"os"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"github.com/thomaspoignant/user-microservice/config"
 	"github.com/thomaspoignant/user-microservice/server"
 )
@@ -17,7 +16,7 @@ var ginLambda *ginadapter.GinLambda
 func main() {
 	//load config file
 	config.LoadConfigFile()
-	switch runAs := os.Getenv("RUN_AS"); runAs {
+	switch runAs := viper.GetString("RUNNING_MODE"); runAs {
 	case "lambda":
 		log.Info("Run as lambda")
 		lambdaRun()

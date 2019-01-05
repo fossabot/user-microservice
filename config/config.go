@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ProjectPath is the home of the project
 var ProjectPath = os.Getenv("GOPATH") + "/src/github.com/thomaspoignant/user-microservice"
 
 // LoadConfigFile load configuration from YAML file
@@ -23,16 +24,18 @@ func LoadConfigFile() {
 			log.Fatalf("Error reading config file, %s", err)
 		}
 	} else {
+		log.Info("Loading config from environnement variables")
 		viper.AutomaticEnv()
 	}
 	viper.SetDefault("APP_PORT", "8080")
 	viper.SetDefault("GIN_MODE", gin.ReleaseMode)
+	viper.SetDefault("RUNNING_MODE", "api")
 }
 
 // determine the name of the config file
 func composeConfigFileName() string {
-	env := os.Getenv("env")
-	test := os.Getenv("test")
+	env := os.Getenv("ENV")
+	test := os.Getenv("TEST")
 	var configFileName []string
 	configFileName = append(configFileName, "config")
 
@@ -46,5 +49,6 @@ func composeConfigFileName() string {
 		configFileName = append(configFileName, env)
 	}
 
-	return strings.Join(configFileName, ".")
+	fileName := strings.Join(configFileName, ".")
+	return fileName
 }

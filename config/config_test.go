@@ -14,6 +14,7 @@ type conf struct {
 
 // TestConfigLocal is testing that we read the value from the config file (config.default.yaml)
 func TestConfigLocal(t *testing.T) {
+	cleanEnvVarForLoadingConfigFile()
 	expected := "debug"
 	LoadConfigFile()
 	got := viper.GetString("GIN_MODE")
@@ -22,20 +23,22 @@ func TestConfigLocal(t *testing.T) {
 
 // TestConfigRelease is testing we reading config from environnement variable in release
 func TestConfigReleaseFromEnvVar(t *testing.T) {
+	cleanEnvVarForLoadingConfigFile()
 	//setting the environnement variable "ENV" to DEV
 	os.Setenv("ENV", "DEV")
 	envVarName := "APP_PORT"
 	expected := "8585"
 	os.Setenv(envVarName, expected)
 	LoadConfigFile()
-	got := viper.GetString(envVarName)
-	assert.Equal(t, expected, got)
-	//clean var after test
-	os.Setenv(envVarName, "")
+	actual := viper.GetString(envVarName)
+	assert.Equal(t, expected, actual)
+	//clean env variables
+	os.Setenv("APP_PORT", "")
 }
 
-// TestConfigRelease is testing we reading config from environnement variable in release
+// TestConfigReleaseNoValueUsingDefault is testing we use default value if no env variable are set
 func TestConfigReleaseNoValueUsingDefault(t *testing.T) {
+	cleanEnvVarForLoadingConfigFile()
 	//setting the environnement variable "ENV" to DEV
 	os.Setenv("ENV", "DEV")
 	envVarName := "APP_PORT"
@@ -43,7 +46,19 @@ func TestConfigReleaseNoValueUsingDefault(t *testing.T) {
 	LoadConfigFile()
 	got := viper.GetString(envVarName)
 	assert.Equal(t, expected, got)
-	//clean var after test
-	os.Setenv(envVarName, "")
+}
 
+func TestConfigFileForTest(t *testing.T) {
+	cleanEnvVarForLoadingConfigFile()
+	envVarName := "RUNNING_MODE"
+	expected := "test"
+	os.Setenv("TEST", "true")
+	LoadConfigFile()
+	got := viper.GetString(envVarName)
+	assert.Equal(t, expected, got)
+}
+
+func cleanEnvVarForLoadingConfigFile() {
+	os.Setenv("TEST", "")
+	os.Setenv("ENV", "")
 }

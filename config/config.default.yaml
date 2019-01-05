@@ -1,2 +1,3 @@
 GIN_MODE: debug
 APP_PORT: 8080
+RUNNING_MODE: api
