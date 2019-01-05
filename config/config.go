@@ -4,34 +4,29 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gin-gonic/gin"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
-// Conf is the configuration object of the app
-var Conf Configuration
-var projetPath = os.Getenv("GOPATH") + "/src/github.com/thomaspoignant/user-microservice"
-
-// Configuration is the struct who store configuration
-type Configuration struct {
-	Database DatabaseConfiguration
-}
+var ProjectPath = os.Getenv("GOPATH") + "/src/github.com/thomaspoignant/user-microservice"
 
 // LoadConfigFile load configuration from YAML file
 func LoadConfigFile() {
-	configFileName := composeConfigFileName()
-	log.Infof("Trying to load file : %s", configFileName)
-	viper.SetConfigName(configFileName)
-	viper.AddConfigPath(projetPath + "/config/")
-
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+	if os.Getenv("ENV") == "" {
+		configFileName := composeConfigFileName()
+		log.Infof("Trying to load file : %s", configFileName)
+		viper.SetConfigName(configFileName)
+		viper.AddConfigPath(ProjectPath + "/config/")
+		if err := viper.ReadInConfig(); err != nil {
+			log.Fatalf("Error reading config file, %s", err)
+		}
+	} else {
+		viper.AutomaticEnv()
 	}
-
-	err := viper.Unmarshal(&Conf)
-	if err != nil {
-		log.Fatalf("unable to decode into struct, %v", err)
-	}
+	viper.SetDefault("APP_PORT", "8080")
+	viper.SetDefault("GIN_MODE", gin.ReleaseMode)
 }
 
 // determine the name of the config file

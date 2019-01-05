@@ -4,29 +4,46 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-
 	"github.com/spf13/viper"
+	"github.com/stretchr/testify/assert"
 )
 
-func TestConfig(t *testing.T) {
-	os.Setenv("test", "true")
-	os.Setenv("env", "default")
-	LoadConfigFile()
-	testTableName := viper.GetString("database.tableName.user")
+type conf struct {
+	GinMode string `yaml:"GIN_MODE"`
+}
 
-	os.Setenv("test", "")
-	os.Setenv("env", "")
+// TestConfigLocal is testing that we read the value from the config file (config.default.yaml)
+func TestConfigLocal(t *testing.T) {
+	expected := "debug"
 	LoadConfigFile()
-	defaultTableName := viper.GetString("database.tableName.user")
+	got := viper.GetString("GIN_MODE")
+	assert.Equal(t, expected, got)
+}
 
-	os.Setenv("test", "false")
-	os.Setenv("env", "dev")
+// TestConfigRelease is testing we reading config from environnement variable in release
+func TestConfigReleaseFromEnvVar(t *testing.T) {
+	//setting the environnement variable "ENV" to DEV
+	os.Setenv("ENV", "DEV")
+	envVarName := "APP_PORT"
+	expected := "8585"
+	os.Setenv(envVarName, expected)
 	LoadConfigFile()
-	devTableName := viper.GetString("database.tableName.user")
+	got := viper.GetString(envVarName)
+	assert.Equal(t, expected, got)
+	//clean var after test
+	os.Setenv(envVarName, "")
+}
 
-	assert.NotEqual(t, testTableName, defaultTableName)
-	assert.Equal(t, "User", defaultTableName)
-	assert.Equal(t, "User", devTableName)
-	assert.Equal(t, "User_test", testTableName)
+// TestConfigRelease is testing we reading config from environnement variable in release
+func TestConfigReleaseNoValueUsingDefault(t *testing.T) {
+	//setting the environnement variable "ENV" to DEV
+	os.Setenv("ENV", "DEV")
+	envVarName := "APP_PORT"
+	expected := "8080"
+	LoadConfigFile()
+	got := viper.GetString(envVarName)
+	assert.Equal(t, expected, got)
+	//clean var after test
+	os.Setenv(envVarName, "")
+
 }

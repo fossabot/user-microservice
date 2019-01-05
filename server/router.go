@@ -3,6 +3,8 @@ package server
 import (
 	"net/http"
 
+	"github.com/spf13/viper"
+
 	"github.com/gin-gonic/gin"
 	"github.com/thomaspoignant/user-microservice/api"
 	"github.com/thomaspoignant/user-microservice/controllers"
@@ -10,6 +12,9 @@ import (
 
 // SetupRouter determine all the routes for this service
 func SetupRouter() *gin.Engine {
+	// setting Gin mode before running
+	gin.SetMode(viper.GetString("GIN_MODE"))
+
 	router := gin.New()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
