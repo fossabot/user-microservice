@@ -48,6 +48,7 @@ func TestConfigReleaseNoValueUsingDefault(t *testing.T) {
 	assert.Equal(t, expected, got)
 }
 
+// TestConfigFileForTest is testing we are using a specific file for tests
 func TestConfigFileForTest(t *testing.T) {
 	cleanEnvVarForLoadingConfigFile()
 	envVarName := "RUNNING_MODE"

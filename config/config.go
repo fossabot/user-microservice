@@ -21,7 +21,7 @@ func LoadConfigFile() {
 		viper.SetConfigName(configFileName)
 		viper.AddConfigPath(ProjectPath + "/config/")
 		if err := viper.ReadInConfig(); err != nil {
-			log.Fatalf("Error reading config file, %s", err)
+			panic("Error reading config file : " + err.Error())
 		}
 	} else {
 		log.Info("Loading config from environnement variables")
