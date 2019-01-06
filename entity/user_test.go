@@ -23,7 +23,7 @@ var uniqDbName string
 var userServiceTest *UserService
 var dynamoDbClient *dynamo.DB
 
-func TestSuite(t *testing.T) {
+func TestSuiteUserEntity(t *testing.T) {
 	// This is what actually runs our suite
 	suite.Run(t, new(UserEntitySuite))
 }
