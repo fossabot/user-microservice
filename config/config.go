@@ -30,6 +30,8 @@ func LoadConfigFile() {
 	viper.SetDefault("APP_PORT", "8080")
 	viper.SetDefault("GIN_MODE", gin.ReleaseMode)
 	viper.SetDefault("RUNNING_MODE", "api")
+	viper.SetDefault("AWS_REGION", "eu-west-1")
+	viper.SetDefault("DYNAMODB_ENDPOINT", "dynamodb.eu-west-1.amazonaws.com")
 }
 
 // determine the name of the config file
