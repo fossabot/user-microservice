@@ -20,6 +20,7 @@ func GetDynamodbTable(tableName string) (*dynamo.Table, error) {
 	setupDynamoDBClient()
 	table := dynamoDbClient.Table(tableName)
 	return &table, nil
+
 }
 
 func setupDynamoDBClient() {
