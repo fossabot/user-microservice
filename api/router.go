@@ -1,4 +1,4 @@
-package server
+package api
 
 import (
 	"net/http"
@@ -6,8 +6,6 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/gin-gonic/gin"
-	"github.com/thomaspoignant/user-microservice/api"
-	"github.com/thomaspoignant/user-microservice/controllers"
 )
 
 // SetupRouter determine all the routes for this service
@@ -22,14 +20,14 @@ func SetupRouter() *gin.Engine {
 	//router.Use(middlewares.AuthMiddleware())
 
 	// healthCheck router
-	health := new(controllers.HealthController)
+	health := new(HealthController)
 	router.GET("/health", health.HealthCheck)
 
 	v1 := router.Group("v1")
 	{
 		userGroup := v1.Group("user")
 		{
-			user := new(controllers.UserController)
+			user := new(UserController)
 			//TODO : mettre les bonnes méthodes en face
 			userGroup.GET("/", user.Status2)
 			userGroup.GET("/:id", user.Status)
@@ -41,8 +39,8 @@ func SetupRouter() *gin.Engine {
 
 	// Returning 404 when calling an unmapped uri
 	router.NoRoute(func(c *gin.Context) {
-		c.JSON(http.StatusNotFound, api.ApiErrorResponse{
-			Code:    api.NotFound,
+		c.JSON(http.StatusNotFound, ApiErrorResponse{
+			Code:    NotFound,
 			Status:  http.StatusNotFound,
 			Message: "Resource not found",
 		})

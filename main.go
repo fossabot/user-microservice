@@ -6,8 +6,8 @@ import (
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/thomaspoignant/user-microservice/api"
 	"github.com/thomaspoignant/user-microservice/config"
-	"github.com/thomaspoignant/user-microservice/server"
 )
 
 var initialized = false
@@ -27,7 +27,7 @@ func main() {
 }
 
 func localRun() {
-	server.Init()
+	api.Init()
 }
 
 func lambdaRun() {
@@ -37,7 +37,7 @@ func lambdaRun() {
 // Handler to wrap gin to lambda
 func Handler(req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	if !initialized {
-		router := server.SetupRouter()
+		router := api.SetupRouter()
 		ginLambda = ginadapter.New(router)
 		initialized = true
 	}

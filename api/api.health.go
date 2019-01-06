@@ -1,10 +1,9 @@
-package controllers
+package api
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/thomaspoignant/user-microservice/api"
 )
 
 // HealthController who handle health check
@@ -18,7 +17,7 @@ type HealthController struct {
 func (h HealthController) HealthCheck(c *gin.Context) {
 	c.JSON(http.StatusOK, HealthController{
 		Status: http.StatusOK,
-		Code:   api.Success,
+		Code:   Success,
 		Health: "RUNNING",
 	})
 }
