@@ -17,12 +17,12 @@ func TestHealthCheck(t *testing.T) {
 	w := testingUtils.PerformHTTPRequest(router, "GET", "/health")
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	expected := HealthController{
+	expected := healthCheck{
 		Health: "RUNNING",
 		Code:   Success,
 	}
 
-	var response HealthController
+	var response healthCheck
 	err := json.Unmarshal([]byte(w.Body.String()), &response)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, response)
