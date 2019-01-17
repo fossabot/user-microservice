@@ -18,7 +18,6 @@ func TestHealthCheck(t *testing.T) {
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	expected := HealthController{
-		Status: http.StatusOK,
 		Health: "RUNNING",
 		Code:   Success,
 	}

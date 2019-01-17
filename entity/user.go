@@ -10,11 +10,14 @@ import (
 )
 
 type User struct {
-	ID        string    `dynamo:"id,hash"`
-	FirstName string    `dynamo:"first_name"`
-	LastName  string    `dynamo:"last_name"`
-	CreatedAt time.Time `dynamo:"created_at"`
-	UpdatedAt time.Time `dynamo:"updated_at"`
+	// id of the User (format UUID)
+	ID        string `dynamo:"id,hash" json:"id" example:"8da8adc3-0ae9-47b2-884c-ee41e691ff57"`
+	FirstName string `dynamo:"first_name" json:"first_name" example:"John"`
+	LastName  string `dynamo:"last_name" json:"last_name" example:"Doe"`
+	// creation date of the entry (format example 2019-01-17T21:03:08.373394+01:00)
+	CreatedAt time.Time `dynamo:"created_at" json:"created_at" example:"2019-01-17T21:03:08.373394+01:00"`
+	// last update date of the entry (format example 2019-01-17T21:03:08.373394+01:00)
+	UpdatedAt time.Time `dynamo:"updated_at" json:"updated_at" example:"2019-01-17T21:03:08.373394+01:00"`
 }
 
 type UserService struct {

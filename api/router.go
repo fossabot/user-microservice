@@ -24,9 +24,6 @@ func SetupRouter() *gin.Engine {
 	health := new(HealthController)
 	router.GET("/health", health.HealthCheck)
 
-	// Swagger endpoint
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	v1 := router.Group("v1")
 	{
 		userGroup := v1.Group("user")
@@ -40,6 +37,9 @@ func SetupRouter() *gin.Engine {
 			userGroup.DELETE("/:id", user.Status)
 		}
 	}
+
+	// Swagger endpoint
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Returning 404 when calling an unmapped uri
 	router.NoRoute(func(c *gin.Context) {

@@ -8,8 +8,13 @@ import (
 
 // HealthController who handle health check
 type HealthController struct {
-	Status int    `json:"status" example:"200"`
-	Code   string `json:"code" example:"SUCCESS"`
+}
+
+// HealthCheck is the response object of the API
+type healthCheck struct {
+	// API return code
+	Code string `json:"code" example:"SUCCESS"`
+	// Health status of the service
 	Health string `json:"health" example:"RUNNING"`
 }
 
@@ -18,11 +23,10 @@ type HealthController struct {
 // @Description health check endpoint to know if the service is up
 // @Tags healthcheck
 // @Produce  json
-// @Success 200 {object} api.HealthController
+// @Success 200 {object} api.healthCheck
 // @Router /health [get]
 func (h HealthController) HealthCheck(c *gin.Context) {
-	c.JSON(http.StatusOK, HealthController{
-		Status: http.StatusOK,
+	c.JSON(http.StatusOK, healthCheck{
 		Code:   Success,
 		Health: "RUNNING",
 	})
