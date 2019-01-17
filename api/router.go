@@ -3,9 +3,10 @@ package api
 import (
 	"net/http"
 
-	"github.com/spf13/viper"
-
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // SetupRouter determine all the routes for this service
@@ -22,6 +23,9 @@ func SetupRouter() *gin.Engine {
 	// healthCheck router
 	health := new(HealthController)
 	router.GET("/health", health.HealthCheck)
+
+	// Swagger endpoint
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := router.Group("v1")
 	{

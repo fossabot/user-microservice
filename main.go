@@ -8,11 +8,22 @@ import (
 	"github.com/spf13/viper"
 	"github.com/thomaspoignant/user-microservice/api"
 	"github.com/thomaspoignant/user-microservice/config"
+	_ "github.com/thomaspoignant/user-microservice/docs"
 )
 
 var initialized = false
 var ginLambda *ginadapter.GinLambda
 
+// @title Swagger user-microservice
+// @version 1.0
+// @description user-microservice is a set of API to manage users
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name Thomas Poignant
+// @contact.url https://github.com/thomaspoignant/user-microservice/
+
+// @host localhost:8080
+// @BasePath /
 func main() {
 	//load config file
 	config.LoadConfigFile()

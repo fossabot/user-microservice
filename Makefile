@@ -15,6 +15,7 @@ test:
 	export GIN_MODE=release && $(GOTEST) -v -short ./...
 
 build:
+	swag init
 	$(GOBUILD) -v .
 
 build-linux:
@@ -35,6 +36,7 @@ lint:
 	$(GOLINT) -set_exit_status $($(GOCMD) list ./... | grep -v /vendor/)
 
 deps:
+	$(GOGET) github.com/swaggo/swag/cmd/swag
 	$(GOGET) github.com/golang/dep/cmd/dep
 	$(GOGET) golang.org/x/lint/golint
 	dep ensure
