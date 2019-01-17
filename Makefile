@@ -9,7 +9,7 @@ GOFMT=gofmt
 GOLINT=golint
 BINARY_NAME=user-microservice
 
-all: deps lint tool test coverage build
+all: deps build lint tool test coverage
 
 test: 
 	export GIN_MODE=release && $(GOTEST) -v -short ./...
