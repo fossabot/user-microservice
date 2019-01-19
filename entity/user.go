@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/guregu/dynamo"
@@ -24,7 +25,7 @@ type UserService struct {
 	UserTable *dynamo.Table
 }
 
-func newUserService(tableName string) (*UserService, error) {
+func NewUserService(tableName string) (*UserService, error) {
 	table, err := db.GetDynamodbTable(tableName)
 	if err != nil {
 		return nil, err
@@ -34,7 +35,12 @@ func newUserService(tableName string) (*UserService, error) {
 	}, nil
 }
 
-func (service *UserService) saveUser(user *User) error {
+func (service *UserService) Test(user string) error {
+	fmt.Print(user)
+	return nil
+}
+
+func (service *UserService) Save(user *User) error {
 	now := time.Now()
 	if user.ID == "" {
 		user.CreatedAt = now
@@ -44,11 +50,11 @@ func (service *UserService) saveUser(user *User) error {
 	return service.UserTable.Put(user).Run()
 }
 
-func (service *UserService) getUser(user *User) error {
+func (service *UserService) Get(user *User) error {
 	log.WithField("user", user).Info("Param for update")
 	return service.UserTable.Get("id", user.ID).One(user)
 }
 
-func (service *UserService) deleteUser(user *User) error {
+func (service *UserService) Delete(user *User) error {
 	return service.UserTable.Delete("id", user.ID).Run()
 }

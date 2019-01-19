@@ -18,9 +18,7 @@ func Test404(t *testing.T) {
 	assert.Equal(t, http.StatusNotFound, w.Code)
 
 	expected := ApiErrorResponse{
-		Status:  http.StatusNotFound,
-		Code:    NotFound,
-		Message: "Resource not found",
+		Error: "Resource not found",
 	}
 
 	var got ApiErrorResponse

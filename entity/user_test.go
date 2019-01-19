@@ -51,7 +51,7 @@ func (suite *UserEntitySuite) SetupTest() {
 
 	// create a service user
 	var err error
-	userServiceTest, err = newUserService(uniqDbName)
+	userServiceTest, err = NewUserService(uniqDbName)
 	suite.Nil(err)
 }
 
@@ -65,7 +65,7 @@ func (suite *UserEntitySuite) TearDownTest() {
 
 // TestEmptyTableName newUserService with an empty table name
 func (suite *UserEntitySuite) TestEmptyTableName() {
-	_, err := newUserService("")
+	_, err := NewUserService("")
 	suite.NotNil(err)
 }
 
@@ -76,7 +76,7 @@ func (suite *UserEntitySuite) TestInsertUser() {
 		LastName:  "Doe",
 	}
 
-	err := userServiceTest.saveUser(&user)
+	err := userServiceTest.Save(&user)
 	suite.Nil(err)
 	suite.NotNil(user.ID)
 	suite.NotNil(user.UpdatedAt)
@@ -94,7 +94,7 @@ func (suite *UserEntitySuite) TestInsertAndReadUser() {
 		LastName:  "Doe",
 	}
 
-	err := userServiceTest.saveUser(&user)
+	err := userServiceTest.Save(&user)
 	suite.Nil(err)
 
 	value, err := dynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -105,7 +105,7 @@ func (suite *UserEntitySuite) TestInsertAndReadUser() {
 		ID: user.ID,
 	}
 
-	err = userServiceTest.getUser(&result)
+	err = userServiceTest.Get(&result)
 	suite.Nil(err)
 
 	expectedCreatedAt, _ := user.CreatedAt.MarshalJSON()
@@ -127,14 +127,14 @@ func (suite *UserEntitySuite) TestInsertAndDeleteUser() {
 		FirstName: "John",
 		LastName:  "Doe",
 	}
-	err := userServiceTest.saveUser(&user)
+	err := userServiceTest.Save(&user)
 	suite.Nil(err)
 
 	numberOfUser, err := dynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
 	suite.Nil(err)
 	suite.Equal(int64(1), numberOfUser)
 
-	err = userServiceTest.deleteUser(&user)
+	err = userServiceTest.Delete(&user)
 	suite.Nil(err)
 
 	numberOfUserAfterDelete, err := dynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -149,7 +149,7 @@ func (suite *UserEntitySuite) TestUpdateUser() {
 		LastName:  "Doe",
 	}
 
-	err := userServiceTest.saveUser(&user)
+	err := userServiceTest.Save(&user)
 	suite.Nil(err)
 
 	value, err := dynamoDbClient.Table(uniqDbName).Get("id", user.ID).Count()
@@ -157,7 +157,7 @@ func (suite *UserEntitySuite) TestUpdateUser() {
 	suite.Equal(int64(1), value)
 
 	result := user
-	err = userServiceTest.getUser(&user)
+	err = userServiceTest.Get(&user)
 	suite.Nil(err)
 	expectedCreatedAt, _ := user.CreatedAt.MarshalJSON()
 	gotCreatedAt, _ := result.CreatedAt.MarshalJSON()
@@ -174,7 +174,7 @@ func (suite *UserEntitySuite) TestUpdateUser() {
 	updatedUser.LastName = "Doe2"
 
 	log.Infof("updatedUser : %s", updatedUser)
-	err = userServiceTest.saveUser(&updatedUser)
+	err = userServiceTest.Save(&updatedUser)
 	suite.Nil(err)
 	gotUpdatedCreatedAt, _ := updatedUser.CreatedAt.MarshalJSON()
 	suite.Equal(expectedCreatedAt, gotUpdatedCreatedAt)

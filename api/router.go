@@ -30,9 +30,9 @@ func SetupRouter() *gin.Engine {
 		{
 			user := new(UserController)
 			//TODO : mettre les bonnes méthodes en face
-			userGroup.GET("/", user.Status2)
+			userGroup.GET("/", user.Status)
 			userGroup.GET("/:id", user.Status)
-			userGroup.POST("/", user.Status)
+			userGroup.POST("/", user.Create)
 			userGroup.PATCH("/:id", user.Status)
 			userGroup.DELETE("/:id", user.Status)
 		}
@@ -44,9 +44,7 @@ func SetupRouter() *gin.Engine {
 	// Returning 404 when calling an unmapped uri
 	router.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, ApiErrorResponse{
-			Code:    NotFound,
-			Status:  http.StatusNotFound,
-			Message: "Resource not found",
+			Error: "Resource not found",
 		})
 	})
 
