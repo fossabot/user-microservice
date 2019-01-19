@@ -29,6 +29,8 @@ coverage:
 
 clean:
 	go clean -i .
+	rm -rf docs
+	rm -rf vendor
 	rm -f $(BINARY_NAME)
 
 lint:
